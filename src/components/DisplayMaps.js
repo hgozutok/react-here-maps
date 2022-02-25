@@ -13,15 +13,15 @@ export default function DisplayMaps() {
     });
     const defaultLayers = platform.createDefaultLayers();
     const hMap = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
-      center: { lat: 50, lng: 5 },
-      zoom: 4,
+      center: { lat: 52.52, lng: 13.4 },
+      zoom: 8,
       pixelRatio: window.devicePixelRatio || 1,
     });
 
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(hMap));
 
     const ui = H.ui.UI.createDefault(hMap, defaultLayers);
-
+    setMap(hMap);
     // This will act as a cleanup to run once this hook runs again.
     // This includes when the component un-mounts
     return () => {
