@@ -18,28 +18,25 @@ export default function DisplayMaps() {
       zoom: 8,
       pixelRatio: window.devicePixelRatio || 1,
     });
+    window.addEventListener("resize", () => hMap.getViewPort().resize());
+
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(hMap));
-    setUi(H.ui.UI.createDefault(hMap, defaultLayers));
+    var myui = H.ui.UI.createDefault(hMap, defaultLayers);
+    setUi(myui);
+    // addInfoBubble(hMap, myui);
+    addMarker(52.52, 13.4, 1000, hMap, myui);
+    addMarker(51.52, 12.4, 50000, hMap, myui);
+    addMarker(53.52, 14.4, 15000, hMap, myui);
 
-    addInfoBubble(map);
-    addMarker(52.52, 13.4, 1000, hMap);
-    addMarker(51.52, 12.4, 50000, hMap);
-    addMarker(53.52, 14.4, 15000, hMap);
-
-    // var icon = new H.map.Icon("../assets/plane/plane.png");
-
-    // var marker = new H.map.Marker({ lat: 52.5, lng: 13.4 }, { icon: icon });
-
-    // hMap.addObject(marker);
     setMap(hMap);
     console.log(map);
-    // addMarker(52.52, 13.4,hMap);
-    return () => {
-      hMap.dispose();
-    };
+
+    // return () => {
+    //   hMap.dispose();
+    // };
   }, []);
 
-  const addMarker = (lat, long, alt = 0, map) => {
+  const addMarker = (lat, long, alt = 0, map, mui) => {
     var LocationOfMarker = { lat: lat, lng: long, alt: alt };
     // Create a marker icon from an image URL:
     var icon = new H.map.Icon("../assets/plane/plane.png");
@@ -49,7 +46,23 @@ export default function DisplayMaps() {
       icon: icon,
     });
 
-    return map.addObject(marker);
+    map.addObject(marker);
+    marker.addEventListener(
+      "tap",
+      function (evt) {
+        var bubble = new H.ui.InfoBubble(
+          { lat: lat, lng: long },
+          {
+            content:
+              "<div>Flight Info</div>" +
+              "<div>from : <br /> to : <br />Capacity: 55,097</div>",
+          }
+        );
+
+        mui.addBubble(bubble);
+      },
+      false
+    );
   };
 
   const addMarkerToGroup = (group, coordinate, html) => {
@@ -58,7 +71,7 @@ export default function DisplayMaps() {
     group.addObject(marker);
   };
 
-  const addInfoBubble = (map) => {
+  const addInfoBubble = (map, mui) => {
     var group = new H.map.Group();
 
     map.addObject(group);
@@ -66,11 +79,17 @@ export default function DisplayMaps() {
     group.addEventListener(
       "tap",
       function (evt) {
-        var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
-          content: evt.target.getData(),
-        });
+        // var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+        //   content: evt.target.getData(),
+        // });
+        var bubble = new H.ui.InfoBubble(
+          { lat: 52.5, lng: 13.4 },
+          {
+            content: "<div>hello</div>",
+          }
+        );
 
-        ui.addBubble(bubble);
+        mui.addBubble(bubble);
       },
       false
     );
