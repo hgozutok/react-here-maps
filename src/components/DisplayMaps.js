@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import MapService from "../services/MapService";
+import * as icons from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function DisplayMaps() {
   const mapRef = useRef();
   const [map, setMap] = React.useState(null);
@@ -24,9 +27,9 @@ export default function DisplayMaps() {
     var myui = H.ui.UI.createDefault(hMap, defaultLayers);
     setUi(myui);
     // addInfoBubble(hMap, myui);
-    addMarker(52.52, 13.4, 1000, hMap, myui);
-    addMarker(51.52, 12.4, 50000, hMap, myui);
-    addMarker(53.52, 14.4, 15000, hMap, myui);
+    addMarker(52.52, 13.4, 1000, hMap, myui, 45);
+    addMarker(51.52, 12.4, 50000, hMap, myui, 70);
+    addMarker(53.52, 14.4, 15000, hMap, myui, 176);
 
     setMap(hMap);
     console.log(map);
@@ -36,15 +39,46 @@ export default function DisplayMaps() {
     // };
   }, []);
 
-  const addMarker = (lat, long, alt = 0, map, mui) => {
+  const addMarker = (lat, long, alt = 0, map, mui, rotateDegree = 0) => {
     var LocationOfMarker = { lat: lat, lng: long, alt: alt };
-    // Create a marker icon from an image URL:
+
     var icon = new H.map.Icon("../assets/plane/plane.png");
 
-    // Create a marker using the previously instantiated icon:
-    var marker = new H.map.Marker(LocationOfMarker, {
-      icon: icon,
-    });
+    var domIconElement = document.createElement("div"),
+      interval = 0;
+
+    domIconElement.innerHTML =
+      '<img src="../assets/plane/plane.png" width="40px" />';
+
+    var marker = map.addObject(
+      new H.map.DomMarker(
+        { lat: lat, lng: long },
+        {
+          icon: new H.map.DomIcon(domIconElement, {
+            onAttach: function (clonedElement, domIcon, domMarker) {
+              var clonedContent = clonedElement.getElementsByTagName("img")[0];
+              console.log(clonedElement);
+
+              clonedContent.style.transform = "rotate(" + rotateDegree + "deg)";
+
+              // set interval to rotate icon's content by 45 degrees every second.
+              //   interval = setInterval(function () {
+              //     clonedContent.style.transform =
+              //       "rotate(" + (counter += 45) + "deg)";
+              //   }, 5000);
+            },
+            onDetach: function (clonedElement, domIcon, domMarker) {
+              // stop the rotation if dom icon is not in map's viewport
+              clearInterval(interval);
+            },
+          }),
+        }
+      )
+    );
+
+    // var marker = new H.map.Marker(LocationOfMarker, {
+    //   icon: icon,
+    // });
 
     map.addObject(marker);
     marker.addEventListener(
