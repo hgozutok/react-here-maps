@@ -94,7 +94,7 @@ export default function DisplayMaps() {
 
     setMap(hMap);
     console.log(map);
-  }, []);
+  }, [H.Map, H.service.Platform, H.ui.UI, loadPlanes, map, ui]);
 
   const addMarker = (lat, long, alt = 0, map, mui, rotateDegree = 0) => {
     // var LocationOfMarker = { lat: lat, lng: long, alt: alt };
