@@ -61,7 +61,7 @@ export default function DisplayMaps() {
       //   );
       // });
     },
-    [mapData, oldMapData]
+    [mapData, oldMapData, addMarker]
   );
 
   const loadMap = useCallback(async () => {
