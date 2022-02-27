@@ -212,8 +212,11 @@ export default function DisplayMaps() {
   // };
 
   useLayoutEffect(() => {
-    loadMap();
-  }, [mapData, loadMap]);
+    const getdata = async () => {
+      loadMap();
+    };
+    getdata();
+  }, [mapData]);
 
   return <div className="map" ref={mapRef} />;
 }
