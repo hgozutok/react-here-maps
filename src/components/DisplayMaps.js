@@ -61,7 +61,7 @@ export default function DisplayMaps() {
     // });
   };
 
-  const loadMap = async () => {
+  const loadMap = useCallback(async () => {
     if (!mapRef.current) return;
     const platform = new H.service.Platform({
       apikey: process.env.REACT_APP_HERE_API_KEY,
@@ -94,7 +94,7 @@ export default function DisplayMaps() {
 
     setMap(hMap);
     console.log(map);
-  };
+  }, []);
 
   const addMarker = (lat, long, alt = 0, map, mui, rotateDegree = 0) => {
     // var LocationOfMarker = { lat: lat, lng: long, alt: alt };
@@ -212,10 +212,7 @@ export default function DisplayMaps() {
   // };
 
   useLayoutEffect(() => {
-    const getdata = async () => {
-      loadMap();
-    };
-    getdata();
+    loadMap();
   }, [mapData, loadMap]);
 
   return <div className="map" ref={mapRef} />;
