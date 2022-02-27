@@ -216,7 +216,7 @@ export default function DisplayMaps() {
       loadMap();
     };
     getdata();
-  }, [mapData]);
+  }, [mapData, loadMap]);
 
   return <div className="map" ref={mapRef} />;
 }
