@@ -61,7 +61,7 @@ export default function DisplayMaps() {
       //   );
       // });
     },
-    [mapData, hMap, myui, oldMapData]
+    [mapData, oldMapData]
   );
 
   const loadMap = useCallback(async () => {
