@@ -14,10 +14,6 @@ export default function DisplayMaps() {
 
   // useEffect(() => {}, []);
 
-  useLayoutEffect(() => {
-    loadMap();
-  }, [mapData, loadMap]);
-
   const loadPlanes = async (hMap, myui) => {
     const response = await PlaneService.getPlanes();
     setOldMapData(mapData);
@@ -178,11 +174,11 @@ export default function DisplayMaps() {
     );
   };
 
-  const addMarkerToGroup = (group, coordinate, html) => {
-    var marker = new H.map.Marker(coordinate);
-    marker.setData(html);
-    group.addObject(marker);
-  };
+  // const addMarkerToGroup = (group, coordinate, html) => {
+  //   var marker = new H.map.Marker(coordinate);
+  //   marker.setData(html);
+  //   group.addObject(marker);
+  // };
 
   // const addInfoBubble = (map, mui) => {
   //   var group = new H.map.Group();
@@ -214,6 +210,10 @@ export default function DisplayMaps() {
   //       "<div>City of Manchester Stadium<br />Capacity: 55,097</div>"
   //   );
   // };
+
+  useLayoutEffect(() => {
+    loadMap();
+  }, [mapData, loadMap]);
 
   return <div className="map" ref={mapRef} />;
 }
