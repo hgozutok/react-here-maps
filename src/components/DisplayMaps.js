@@ -16,7 +16,7 @@ export default function DisplayMaps() {
 
   useLayoutEffect(() => {
     loadMap();
-  }, [mapData]);
+  }, [mapData, loadMap()]);
 
   const loadPlanes = async (hMap, myui) => {
     const response = await PlaneService.getPlanes();
