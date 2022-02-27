@@ -14,52 +14,55 @@ export default function DisplayMaps() {
 
   // useEffect(() => {}, []);
 
-  const loadPlanes = async (hMap, myui) => {
-    const response = await PlaneService.getPlanes();
-    setOldMapData(mapData);
-    setMapData(response);
+  const loadPlanes = useCallback(
+    async (hMap, myui) => {
+      const response = await PlaneService.getPlanes();
+      setOldMapData(mapData);
+      setMapData(response);
 
-    response.slice(0, 100).map((data) => {
-      console.log(oldMapData);
+      response.slice(0, 100).map((data) => {
+        console.log(oldMapData);
 
-      console.log(mapData[5], mapData[6], mapData[13]);
-      console.log(response[5], response[6], response[13]);
-      return addMarker(
-        data[5] ? data[5] : 0,
-        data[6] ? data[6] : 0,
-        data[13] ? data[13] : 0,
+        console.log(mapData[5], mapData[6], mapData[13]);
+        console.log(response[5], response[6], response[13]);
+        return addMarker(
+          data[5] ? data[5] : 0,
+          data[6] ? data[6] : 0,
+          data[13] ? data[13] : 0,
 
-        hMap,
-        myui,
-        data[10] ? data[10] : 0
-      );
-    });
+          hMap,
+          myui,
+          data[10] ? data[10] : 0
+        );
+      });
 
-    //console.log(response);
+      //console.log(response);
 
-    //console.log(mapData);
+      //console.log(mapData);
 
-    //addMarker(12.2684, 57.6498, 556.26, hMap, myui, 205.8);
-    // addMarker(
-    //   mapData[0].latitude,
-    //   mapData[0].longitude,
-    //   mapData[0].geo_altitude,
-    //   hMap,
-    //   myui,
-    //   mapData[0].true_track
-    // );
+      //addMarker(12.2684, 57.6498, 556.26, hMap, myui, 205.8);
+      // addMarker(
+      //   mapData[0].latitude,
+      //   mapData[0].longitude,
+      //   mapData[0].geo_altitude,
+      //   hMap,
+      //   myui,
+      //   mapData[0].true_track
+      // );
 
-    // planes.forEach((element) => {
-    //   addMarker(
-    //     element.latitude,
-    //     element.longitude,
-    //     element.geo_altitude ? element.geo_altitude : 0,
-    //     hMap,
-    //     myui,
-    //     element.true_track ? element.true_track : 0
-    //   );
-    // });
-  };
+      // planes.forEach((element) => {
+      //   addMarker(
+      //     element.latitude,
+      //     element.longitude,
+      //     element.geo_altitude ? element.geo_altitude : 0,
+      //     hMap,
+      //     myui,
+      //     element.true_track ? element.true_track : 0
+      //   );
+      // });
+    },
+    [mapData, hMap, myui, oldMapData]
+  );
 
   const loadMap = useCallback(async () => {
     if (!mapRef.current) return;
