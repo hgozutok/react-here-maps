@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
-import MapService from "../services/MapService";
-import * as icons from "@fortawesome/free-solid-svg-icons";
+import React, { useRef, useLayoutEffect, useState } from "react";
+// import MapService from "../services/MapService";
+// import * as icons from "@fortawesome/free-solid-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PlaneService from "../services/PlaneServices";
 export default function DisplayMaps() {
@@ -12,11 +12,11 @@ export default function DisplayMaps() {
   const [mapData, setMapData] = React.useState([]);
   const [oldMapData, setOldMapData] = React.useState([]);
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     loadMap();
-  }, []);
+  }, [mapData]);
 
   const loadPlanes = async (hMap, myui) => {
     const response = await PlaneService.getPlanes();
@@ -24,11 +24,11 @@ export default function DisplayMaps() {
     setMapData(response);
 
     response.slice(0, 100).map((data) => {
-      // console.log(data);
+      console.log(oldMapData);
 
       console.log(mapData[5], mapData[6], mapData[13]);
       console.log(response[5], response[6], response[13]);
-      addMarker(
+      return addMarker(
         data[5] ? data[5] : 0,
         data[6] ? data[6] : 0,
         data[13] ? data[13] : 0,
@@ -87,7 +87,7 @@ export default function DisplayMaps() {
     // });
     window.addEventListener("resize", () => hMap.getViewPort().resize());
 
-    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(hMap));
+    // const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(hMap));
     var myui = H.ui.UI.createDefault(hMap, defaultLayers);
     setUi(myui);
     // addInfoBubble(hMap, myui);
@@ -101,7 +101,7 @@ export default function DisplayMaps() {
   };
 
   const addMarker = (lat, long, alt = 0, map, mui, rotateDegree = 0) => {
-    var LocationOfMarker = { lat: lat, lng: long, alt: alt };
+    // var LocationOfMarker = { lat: lat, lng: long, alt: alt };
 
     //console.log(lat, long, alt);
 
@@ -120,7 +120,7 @@ export default function DisplayMaps() {
     //   }
     // }
 
-    var icon = new H.map.Icon("../assets/plane/plane.png");
+    // var icon = new H.map.Icon("../assets/plane/plane.png");
 
     var domIconElement = document.createElement("div"),
       interval = 0;
@@ -177,68 +177,6 @@ export default function DisplayMaps() {
       false
     );
   };
-  const updateMarker = (
-    lat,
-    long,
-    alt = 0,
-    map,
-    mui,
-    rotateDegree = 0,
-    oldlat,
-    oldlong
-  ) => {
-    //var LocationOfMarker = { lat: lat, lng: long, alt: alt };
-
-    //console.log(lat, long, alt);
-    // var icon = new H.map.Icon("../assets/plane/plane.png");
-
-    var domIconElement = document.createElement("div"),
-      interval = 0;
-
-    domIconElement.innerHTML =
-      '<img src="../assets/plane/plane.png" width="40px" />';
-    var point = H.map.DomMarker(
-      { lat: oldlat, lng: oldlong },
-      {
-        icon: new H.map.DomIcon(domIconElement, {
-          onAttach: function (clonedElement, domIcon, domMarker) {
-            var clonedContent = clonedElement.getElementsByTagName("img")[0];
-
-            clonedContent.style.transform = "rotate(" + rotateDegree + "deg)";
-          },
-          onDetach: function (clonedElement, domIcon, domMarker) {
-            clearInterval(interval);
-          },
-        }),
-      }
-    );
-    point.setPosition({ lat: lat, lng: long });
-
-    //map.removeObject(point);
-    var marker = map.addObject(point);
-
-    // var marker = new H.map.Marker(LocationOfMarker, {
-    //   icon: icon,
-    // });
-
-    //map.addObject(marker);
-    marker.addEventListener(
-      "tap",
-      function (evt) {
-        var bubble = new H.ui.InfoBubble(
-          { lat: lat, lng: long },
-          {
-            content:
-              "<div>Flight Info</div>" +
-              "<div>from : <br /> to : <br />Capacity: 55,097</div>",
-          }
-        );
-
-        mui.addBubble(bubble);
-      },
-      false
-    );
-  };
 
   const addMarkerToGroup = (group, coordinate, html) => {
     var marker = new H.map.Marker(coordinate);
@@ -246,36 +184,36 @@ export default function DisplayMaps() {
     group.addObject(marker);
   };
 
-  const addInfoBubble = (map, mui) => {
-    var group = new H.map.Group();
+  // const addInfoBubble = (map, mui) => {
+  //   var group = new H.map.Group();
 
-    map.addObject(group);
+  //   map.addObject(group);
 
-    group.addEventListener(
-      "tap",
-      function (evt) {
-        // var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
-        //   content: evt.target.getData(),
-        // });
-        var bubble = new H.ui.InfoBubble(
-          { lat: 52.5, lng: 13.4 },
-          {
-            content: "<div>hello</div>",
-          }
-        );
+  //   group.addEventListener(
+  //     "tap",
+  //     function (evt) {
+  //       // var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+  //       //   content: evt.target.getData(),
+  //       // });
+  //       var bubble = new H.ui.InfoBubble(
+  //         { lat: 52.5, lng: 13.4 },
+  //         {
+  //           content: "<div>hello</div>",
+  //         }
+  //       );
 
-        mui.addBubble(bubble);
-      },
-      false
-    );
+  //       mui.addBubble(bubble);
+  //     },
+  //     false
+  //   );
 
-    addMarkerToGroup(
-      group,
-      { lat: 52.5, lng: 13.4 },
-      "<div>Flight Info</div>" +
-        "<div>City of Manchester Stadium<br />Capacity: 55,097</div>"
-    );
-  };
+  //   addMarkerToGroup(
+  //     group,
+  //     { lat: 52.5, lng: 13.4 },
+  //     "<div>Flight Info</div>" +
+  //       "<div>City of Manchester Stadium<br />Capacity: 55,097</div>"
+  //   );
+  // };
 
   return <div className="map" ref={mapRef} />;
 }
