@@ -16,14 +16,7 @@ export const HereMap = () => {
     if (!isLoading && mapRef.current) {
       console.log(planesData);
       planesData.slice(0, 200).forEach((data) => {
-        addMarker(
-          data[5] ? data[5] : 0,
-          data[6] ? data[6] : 0,
-          data[13] ? data[13] : 0,
-          map,
-          ui,
-          data[10] ? data[10] : 0
-        );
+        addMarker(data, map, ui);
       });
     }
   }, [isMapLoading, isLoading, planesData]);
