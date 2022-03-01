@@ -1,7 +1,6 @@
 import "./App.css";
-import DisplayMaps from "./components/DisplayMaps";
+
 import { HereMap } from "./components/HereMap";
-import { Map } from "./components/Map";
 
 function App() {
   return (

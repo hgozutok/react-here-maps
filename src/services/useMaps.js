@@ -116,14 +116,6 @@ export const useMaps = () => {
               "<div>velocity:" +
               plane[9] +
               "</div>",
-
-            // "<div>Flight Info</div>" + "<div>origin_country :" + plane[2]
-            //   ? plane[2]
-            //   : "" + " <br /></div>" + "<div> icao24 : " + plane[0]
-            //   ? plane[0]
-            //   : "" + "<br /></div>" + "<div> velocity: " + plane[9]
-            //   ? plane[9]
-            //   : "" + +"</div>",
           }
         );
 
