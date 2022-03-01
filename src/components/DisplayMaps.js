@@ -12,7 +12,7 @@ export default function DisplayMaps() {
   const [mapData, setMapData] = React.useState([]);
   const [oldMapData, setOldMapData] = React.useState([]);
 
-  const dispatch = React.useDispatch();
+  // const dispatch = React.useDispatch();
   // useEffect(() => {}, []);
 
   // const addMarkerToGroup = (group, coordinate, html) => {
