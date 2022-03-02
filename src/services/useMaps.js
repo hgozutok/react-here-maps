@@ -9,6 +9,7 @@ export const useMaps = () => {
   const [defaultLayers, setDefaultLayers] = React.useState(null);
   const [behavior, setBehavior] = React.useState(null);
   const [error, setError] = React.useState(null);
+  const [refresh, setRefresh] = React.useState(false);
 
   React.useLayoutEffect(() => {
     const getMap = () => {
@@ -69,9 +70,56 @@ export const useMaps = () => {
     H.mapevents.MapEvents,
     H.service.Platform,
     H.ui.UI,
+    refresh,
   ]);
 
-  const addMarker = (plane, map, mui) => {
+  const refreshMarkers = (map, ui, planesData, planesOldData) => {
+    var objects = map.getObjects(),
+      len = map.getObjects().length;
+
+    for (let i = 0; i < len; i++) {
+      let oLat = objects[i].getGeometry().lat;
+      let oLng = objects[i].getGeometry().lng;
+      // console.log(objects[i].getGeometry().lng);
+
+      planesOldData.filter((element) => {
+        return () => {
+          if (element[5] === oLat && element[6] === oLng) {
+            planesData.filter((newElement) => {
+              return () => {
+                if (newElement[0] === element[0]) {
+                  if (newElement[5] !== oLat || newElement[6] !== oLng) {
+                    return objects[i].setGeometry({
+                      lat: newElement[5],
+                      lng: newElement[6],
+                    });
+
+                    // console.log(
+                    //   "moved",
+                    //   element[5],
+                    //   element[6],
+                    //   newElement[5],
+                    //   newElement[6]
+                    // );
+                  }
+                }
+              };
+            });
+          }
+        };
+      });
+    }
+  };
+  const deleteAllMarkers = (map, ui, planesData, planesOldData) => {
+    var objects = map.getObjects(),
+      len = map.getObjects().length,
+      i;
+
+    for (i = 0; i < len; i += 1) {
+      map.removeObject(objects[i]);
+    }
+  };
+  const addMarker = (plane, map, mui, planesData) => {
     var domIconElement = document.createElement("div"),
       interval = 0;
 
@@ -100,6 +148,18 @@ export const useMaps = () => {
     var marker = map.addObject(point);
 
     map.addObject(marker);
+
+    setInterval(() => {
+      planesData.filter((element) => {
+        return () => {
+          if (element["icao24"] === plane["icao24"]) {
+            marker.setGeometry({ lat: plane[5], lng: plane[6] });
+            //  console.log(plane[5], plane[6]);
+          }
+        };
+      });
+    }, 10000);
+
     marker.addEventListener(
       "tap",
       function (evt) {
@@ -123,6 +183,7 @@ export const useMaps = () => {
       },
       false
     );
+    // setRefresh(true);
   };
   // const addHtml = () => {
   //   return <div className="map" ref={mapRef} />;
@@ -137,6 +198,9 @@ export const useMaps = () => {
     defaultLayers,
     error,
     behavior,
+    refreshMarkers,
+    setRefresh,
+    deleteAllMarkers,
   };
 };
 
