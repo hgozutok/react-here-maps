@@ -5,18 +5,18 @@ export const usePlanes = () => {
   const [planesData, setPlanesData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  const [planesOldData, setPlanesOldData] = React.useState([]);
 
   React.useLayoutEffect(() => {
     const getPlanes = async () => {
       try {
         setIsLoading(true);
-        await axios
-          .get(process.env.REACT_APP_OPENSKY_GET_ALL)
-          .then((response) => {
-            setPlanesData(response.data.states);
-            //console.log(planesData);
-            //return planesData;
-          });
+        axios.get(process.env.REACT_APP_OPENSKY_GET_ALL).then((response) => {
+          setPlanesOldData(planesData.slice(0, 100));
+          setPlanesData(response.data.states.slice(0, 100));
+          //console.log(planesData);
+          //return planesData;
+        });
       } catch (error) {
         setError(error);
       } finally {
@@ -27,6 +27,7 @@ export const usePlanes = () => {
       }
     };
     getPlanes();
-  }, []);
-  return { planesData, isLoading, error };
+  }, [planesData]);
+  return { planesData, isLoading, error, planesOldData };
 };
+export default usePlanes;
